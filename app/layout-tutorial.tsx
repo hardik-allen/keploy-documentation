@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Sidebar from "@/components/Sidebar";
 
 export const metadata: Metadata = {
-  title: "Keploy Go Quickstart Tutorial",
-  description: "Learn how to get started with Keploy for Go applications",
+  title: "Keploy Echo + SQL Tutorial",
+  description: "Learn how to use Keploy with Echo framework and SQL databases",
 };
 
-export default function TutorialLayout({
+export default function EchoSqlLayout({
   children,
 }: {
   children: React.ReactNode;

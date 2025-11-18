@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Keploy Documentation",
-  description: "Learn how to get started with Keploy for Go applications",
+  title: "Keploy Echo + SQL Tutorial",
+  description: "Learn how to use Keploy with Echo framework and SQL databases",
 };
 
 export default function RootLayout({
@@ -29,7 +30,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-        {children}
+        <div className="flex">
+          <Sidebar />
+          <main className="flex-1 lg:ml-64">
+            <div className="prose prose-lg mx-auto max-w-6xl px-6 py-8 dark:prose-invert">
+              {children}
+            </div>
+          </main>
+        </div>
       </body>
     </html>
   );

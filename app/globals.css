@@ -54,12 +54,14 @@ body {
   scroll-margin-top: 4rem;
 }
 
-.prose h3 {
+.prose h3,
+.prose h3[id] {
   font-size: 1.5rem;
   font-weight: 600;
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
   line-height: 1.4;
+  scroll-margin-top: 4rem;
 }
 
 .prose p {
