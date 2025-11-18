@@ -6,11 +6,14 @@ This tutorial will show you how to integrate Keploy with your Echo + SQL applica
 
 Echo is known for its minimalist design and high performance, making it perfect for building clean, efficient APIs. When combined with SQL databases (PostgreSQL, MySQL, SQLite), you get a powerful stack for building data-driven applications.
 
-**The challenge?** Testing these applications traditionally requires:
-- Setting up test databases
-- Writing complex SQL fixtures
-- Mocking database connections
-- Maintaining test data that mirrors production
+<h3>The challenge?</h3>
+
+Testing these applications traditionally requires:
+
+- **1.Setting up test databases** — Provisioning PostgreSQL/MySQL instances, running migrations, managing schemas
+- **2.Writing complex SQL fixtures** — Creating test data that mirrors production scenarios
+- **3.Mocking database connections** — Using libraries like `go-sqlmock` or writing custom mock drivers
+- **4.Maintaining test data** — Keeping fixtures in sync as your schema evolves, ensuring data consistency across test runs
 
 **Keploy solves this** by recording your actual database interactions during normal API usage. No mocks, no fixtures—just real behavior captured and replayed as tests.
 
@@ -26,8 +29,6 @@ Before we dive in, make sure you have:
 - **Docker** installed and running (for managing your SQL database)
 - **Basic Echo knowledge** — familiarity with Echo's router, handlers, and middleware
 - **SQL database experience** — understanding of SQL queries and database connections
-
-**Which SQL database?** This tutorial works with PostgreSQL, MySQL, or SQLite. We'll use PostgreSQL in our examples, but the concepts apply to any SQL database.
 
 
 <h2 id="setup-echo-app">Setting Up Golang Application</h2>
@@ -61,14 +62,16 @@ When Keploy records your Echo application, it captures:
 4. **Query Results** — The data returned from your SQL database
 5. **Transaction Boundaries** — Database transactions and their outcomes
 
-**Why this matters**: Unlike unit tests that mock the database, Keploy captures real SQL interactions. This means your tests verify actual database behavior, not assumptions about how your queries work.
+<WhyBox title="Why this matters">
+Unlike unit tests that mock the database, Keploy captures real SQL interactions. This means your tests verify actual database behavior, not assumptions about how your queries work.
+</WhyBox>
 
 <h2 id="running-echo-app">Running Your Echo + SQL Application with Keploy</h2>
 
 We'll use a sample URL shortener app to test Keploy integration capabilities using Echo and PostgreSQL. This practical example will show you exactly how Keploy works with real API calls and database interactions.
 
 <Callout type="warning">
-**Don't have Keploy installed yet?** Before running this sample, make sure Keploy is installed on your system. 👉 [Go to Installation Guide](https://keploy.io/docs/server/introduction/)
+**Don't have Keploy installed yet?** Before running this sample, make sure Keploy is installed on your system. 👉 [Go to Installation Guide](https://keploy.io/docs/server/installation/)
 </Callout>
 
 <h2 id="docker-compose-method">Using Docker Compose 🐳</h2>
@@ -95,7 +98,9 @@ docker compose up
 
 This starts PostgreSQL in a Docker container. The application will connect to this database instance.
 
-**Why Docker Compose?** It manages both your application and database dependencies, ensuring they're properly networked and can communicate with each other.
+<WhyBox title="Why Docker Compose?">
+It manages both your application and database dependencies, ensuring they're properly networked and can communicate with each other.
+</WhyBox>
 
 **What Keploy is doing here**: Keploy needs a real, running database because it captures actual SQL interactions, not mocked ones. When you make API calls, your Echo handlers execute real SQL queries against this PostgreSQL instance. Keploy intercepts these queries at the network level, recording:
 - The exact SQL statement (including prepared statements)
@@ -103,7 +108,9 @@ This starts PostgreSQL in a Docker container. The application will connect to th
 - The database response (rows returned, affected rows, etc.)
 - Transaction boundaries and commit/rollback operations
 
-**Why this matters for Go developers**: Traditional testing requires you to either mock the database (losing real SQL validation) or set up test databases manually. Keploy eliminates this choice—you get real database interactions captured automatically, ensuring your tests verify actual SQL behavior, not assumptions about how your queries work.
+<WhyBox title="Why this matters for Go developers">
+Traditional testing requires you to either mock the database (losing real SQL validation) or set up test databases manually. Keploy eliminates this choice—you get real database interactions captured automatically, ensuring your tests verify actual SQL behavior, not assumptions about how your queries work.
+</WhyBox>
 
 <h3 id="echo-step-3">Step 3: Build the Application</h3>
 
@@ -120,7 +127,9 @@ This creates a Docker image of your Echo application, ready to run in a containe
 - Isolation from your host system's network
 - Easy cleanup after testing
 
-**Why this matters for Go developers**: Docker provides a clean, reproducible environment. Your Echo app runs exactly the same way in the container as it would in production, and Keploy can observe all interactions without interfering with your local development setup. This means you can test with confidence that what works in the container will work in production.
+<WhyBox title="Why this matters for Go developers">
+Docker provides a clean, reproducible environment. Your Echo app runs exactly the same way in the container as it would in production, and Keploy can observe all interactions without interfering with your local development setup. This means you can test with confidence that what works in the container will work in production.
+</WhyBox>
 
 <h3 id="echo-step-4">Step 4: Capture the Testcases</h3>
 
@@ -138,7 +147,9 @@ keploy record -c "docker run -p 8082:8082 --name echoSqlApp --network keploy-net
 - Capturing SQL queries sent to PostgreSQL
 - Recording both requests and responses
 
-**Why eBPF?** eBPF allows Keploy to intercept network traffic at the kernel level, capturing all interactions without modifying your application code.
+<WhyBox title="Why eBPF?">
+eBPF allows Keploy to intercept network traffic at the kernel level, capturing all interactions without modifying your application code.
+</WhyBox>
 
 **What Keploy is doing behind the scenes**: When you run `keploy record`, Keploy uses eBPF (extended Berkeley Packet Filter) to hook into the Linux kernel's networking stack. This means:
 
@@ -155,8 +166,7 @@ keploy record -c "docker run -p 8082:8082 --name echoSqlApp --network keploy-net
 
 4. **Automatic Test Generation**: As Keploy captures these interactions, it automatically creates YAML test cases that can be replayed later.
 
-**Why this is revolutionary for Go developers**: 
-
+<WhyBox title="Why this is revolutionary for Go developers">
 - **No Test Code to Write**: You don't need to write `httptest.NewRecorder()` calls, mock database connections, or create test fixtures. Just use your API normally, and Keploy captures everything.
 
 - **Real Integration Testing**: Unlike unit tests that mock dependencies, Keploy captures real database interactions. This means your tests verify:
@@ -168,6 +178,7 @@ keploy record -c "docker run -p 8082:8082 --name echoSqlApp --network keploy-net
 - **Time Savings**: A typical Go developer might spend hours writing integration tests for a single endpoint. With Keploy, you spend minutes using your API, and you have comprehensive tests.
 
 - **Living Documentation**: Your test cases are actual API usage patterns, not hypothetical scenarios. They document how your API is really used, not how you think it might be used.
+</WhyBox>
 
 <h3 id="echo-step-5">Step 5: Generate Testcases</h3>
 
@@ -249,8 +260,7 @@ For each API call you make, Keploy captures a complete snapshot of the interacti
    - These mocks are stored in `keploy/mocks/` directory
    - During testing, Keploy will use these mocks instead of hitting the real database
 
-**Why this approach is powerful for Go developers**:
-
+<WhyBox title="Why this approach is powerful for Go developers">
 - **No Manual Test Writing**: Instead of writing Go test code like:
   ```go
   func TestCreateURL(t *testing.T) {
@@ -280,6 +290,7 @@ For each API call you make, Keploy captures a complete snapshot of the interacti
 - **Database Mocking Without Code**: Keploy automatically creates mocks for your PostgreSQL interactions. You don't need to write mock database drivers or use libraries like `go-sqlmock`. The mocks are generated from real database responses.
 
 - **Complete Integration Coverage**: Each test case captures the entire request-response cycle, including all database operations. This gives you integration test coverage that would normally require significant setup and maintenance.
+</WhyBox>
 
 <h3 id="echo-step-6">Step 6: Run the Testcases</h3>
 
@@ -338,8 +349,7 @@ When you run `keploy test`, Keploy performs a sophisticated replay process:
    - It checks that query parameters match what was recorded
    - This ensures your database logic hasn't changed unexpectedly
 
-**Why this is transformative for Go developers**:
-
+<WhyBox title="Why this is transformative for Go developers">
 - **No Test Database Setup**: Traditional Go integration tests require:
   - Setting up a test database (PostgreSQL, MySQL, etc.)
   - Running migrations to create schema
@@ -381,6 +391,7 @@ When you run `keploy test`, Keploy performs a sophisticated replay process:
 4. Commit with confidence, knowing your changes are validated
 
 This workflow is faster, more reliable, and requires less maintenance than traditional integration testing approaches.
+</WhyBox>
 
 <h2 id="local-linux-method">Running App Locally on Linux/WSL 🐧</h2>
 
@@ -423,7 +434,9 @@ This compiles your Echo application into an executable binary.
 sudo -E PATH=$PATH keploy record -c "./echo-psql-url-shortener"
 ```
 
-**Why `sudo`?** Keploy uses eBPF which requires elevated privileges to intercept network traffic at the kernel level.
+<WhyBox title="Why `sudo`?">
+Keploy uses eBPF which requires elevated privileges to intercept network traffic at the kernel level.
+</WhyBox>
 
 **What's happening**: Keploy is now recording all API calls and database interactions from your locally running Echo application.
 
@@ -433,13 +446,15 @@ sudo -E PATH=$PATH keploy record -c "./echo-psql-url-shortener"
 - Monitor system calls related to networking
 - Capture database connection traffic
 
-**Why this matters for Go developers**: Running locally gives you the ability to:
+<WhyBox title="Why this matters for Go developers">
+Running locally gives you the ability to:
 - Use your IDE's debugger while Keploy records
 - See real-time logs from your Echo application
 - Make code changes and test immediately
 - Debug issues more easily than in a container
 
 The trade-off is requiring `sudo`, but the benefit is a more integrated development experience. Your application runs exactly as it would in production, but you have full visibility and control.
+</WhyBox>
 
 <h3 id="local-step-5">Step 5: Generate Testcases</h3>
 
@@ -505,7 +520,7 @@ Congrats on the journey so far! You've seen Keploy's power, flexed your coding m
 
 Hope this helps you out. If you still have any questions, reach out to us.
 
-<h2 id="echo-best-practices">Best Practices for Echo + SQL with Keploy</h2>
+<h2 id="echo-best-practices">Best Practices to keep in mind while recording testcases using Keploy</h2>
 
 Here are some tips to get the most out of Keploy with your Echo + SQL application:
 
@@ -591,12 +606,14 @@ noise:
   # Or use time-based fuzzy matching
 ```
 
-**Why this happens**: When you create a resource, PostgreSQL generates:
+<WhyBox title="Why this happens">
+When you create a resource, PostgreSQL generates:
 - Auto-increment IDs (1, 2, 3...)
 - Timestamps (`2024-01-15 10:30:00`)
 - UUIDs (if you're using them)
 
 These values will be different every time, so Keploy needs to know to ignore them.
+</WhyBox>
 
 **Best practice**: Add noise fields immediately after recording your first test case. This prevents frustration later when tests start failing due to these dynamic values.
 
@@ -645,12 +662,14 @@ docker-compose up -d
 - ✅ Standard `net/http`
 - ✅ Any framework that uses Go's standard HTTP interfaces
 
-**Why it works universally**: Keploy uses eBPF to intercept HTTP traffic at the kernel level, before it even reaches your framework. This means:
+<WhyBox title="Why it works universally">
+Keploy uses eBPF to intercept HTTP traffic at the kernel level, before it even reaches your framework. This means:
 - No framework-specific code needed
 - No middleware to add
 - No code changes required
 
 The concepts in this tutorial apply to any Go web framework. Just replace the Echo-specific parts with your framework of choice!
+</WhyBox>
 
 <h3 id="faq-5">Q: How do I update test cases when my API changes?</h3>
 
@@ -706,13 +725,15 @@ The concepts in this tutorial apply to any Go web framework. Just replace the Ec
 3. Fail the build if tests don't pass
 4. Use the same test cases across all environments
 
-**Why this is powerful**: Traditional integration tests in CI/CD require:
+<WhyBox title="Why this is powerful">
+Traditional integration tests in CI/CD require:
 - Setting up databases
 - Managing test data
 - Handling cleanup
 - Dealing with flaky tests
 
 With Keploy, you just run `keploy test` and you're done. It's that simple!
+</WhyBox>
 
 <h3 id="faq-7">Q: What's the difference between Keploy tests and traditional Go unit tests?</h3>
 

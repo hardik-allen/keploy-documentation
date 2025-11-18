@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { useTheme } from './ThemeProvider';
+import { useSidebar } from './SidebarContext';
 
 const getNavigation = (pathname: string) => {
   // Since echo-sql is now the home page, always show the echo-sql navigation
@@ -62,77 +64,87 @@ const getNavigation = (pathname: string) => {
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, setIsOpen } = useSidebar();
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    'Echo + SQL Sections': true,
+    'Docker Compose Method': true,
+    'Local Linux/WSL Method': false,
+    'FAQs': false,
+  });
+  const { theme } = useTheme();
   const navigation = getNavigation(pathname || '');
+
+  const toggleSection = (title: string) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [title]: !prev[title],
+    }));
+  };
 
   return (
     <>
-      {/* Mobile menu button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="fixed left-4 top-20 z-40 rounded-lg border border-zinc-200 bg-white p-2 shadow-lg dark:border-zinc-800 dark:bg-zinc-900 lg:hidden"
-        aria-label="Toggle sidebar"
-      >
-        <svg
-          className="h-6 w-6 text-zinc-600 dark:text-zinc-400"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          {isOpen ? (
-            <path d="M6 18L18 6M6 6l12 12" />
-          ) : (
-            <path d="M4 6h16M4 12h16M4 18h16" />
-          )}
-        </svg>
-      </button>
-
-      {/* Overlay for mobile */}
+      {/* Overlay - visible when sidebar is open on mobile/tablet */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden transition-opacity duration-300"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Toggleable on all screens, integrated on desktop */}
       <aside
-        className={`fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] w-64 transform border-r border-zinc-200 bg-white transition-transform duration-300 dark:border-zinc-800 dark:bg-zinc-900 lg:translate-x-0 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        key={theme}
+        className={`
+          fixed left-0 top-14 sm:top-16 z-50 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] w-64 sm:w-72 transform border-r border-zinc-200 bg-white transition-all duration-300 dark:border-zinc-800 dark:bg-black
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+          lg:relative lg:translate-x-0 lg:top-0 lg:h-auto lg:z-auto lg:w-64 lg:block
+        `}
       >
-        <div className="h-full overflow-y-auto px-4 py-6">
-          <nav className="space-y-6">
-            {navigation.map((section) => (
-              <div key={section.title}>
-                <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                  {section.title}
-                </h3>
-                <ul className="space-y-1">
-                  {section.items.map((item) => {
-                    const isActive = pathname === item.href || pathname?.startsWith(item.href);
-                    return (
-                      <li key={item.href}>
-                        <Link
-                          href={item.href}
-                          onClick={() => setIsOpen(false)}
-                          className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
-                            isActive
-                              ? 'bg-zinc-100 font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100'
-                              : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100'
-                          }`}
-                        >
-                          {item.label}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
+        <div className="h-full lg:h-auto overflow-y-auto px-3 sm:px-4 py-4 sm:py-6">
+          <nav className="space-y-1">
+            {navigation.map((section) => {
+              const isExpanded = expandedSections[section.title] ?? true;
+              return (
+                <div key={section.title} className="mb-4">
+                  <button
+                    onClick={() => toggleSection(section.title)}
+                    className="w-full flex items-center justify-between mb-2 px-2 py-2 sm:py-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors duration-200 touch-manipulation"
+                  >
+                    <span>{section.title}</span>
+                    <svg
+                      className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                  {isExpanded && (
+                    <ul className="space-y-0.5 pl-2">
+                      {section.items.map((item) => {
+                        const isActive = pathname === item.href || pathname?.startsWith(item.href);
+                        return (
+                          <li key={item.href}>
+                            <Link
+                              href={item.href}
+                              onClick={() => setIsOpen(false)}
+                              className={`block rounded-lg px-3 py-2 sm:py-1.5 text-sm transition-colors duration-200 touch-manipulation ${
+                                isActive
+                                  ? 'bg-zinc-100 font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100'
+                                  : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100'
+                              }`}
+                            >
+                              {item.label}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
           </nav>
         </div>
       </aside>
