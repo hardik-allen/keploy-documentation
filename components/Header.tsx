@@ -11,7 +11,7 @@ export default function Header() {
   return (
     <header 
       key={theme}
-      className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-sm transition-colors duration-200 dark:border-zinc-800 dark:bg-black/80"
+      className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-sm transition-colors duration-200 dark:border-zinc-800 dark:bg-black"
     >
       <div className="w-full">
         <div className="flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8 gap-2 sm:gap-3">
@@ -22,7 +22,7 @@ export default function Header() {
             aria-label="Keploy Docs Home"
           >
             <span className="text-xl sm:text-2xl flex-shrink-0">🚀</span>
-            <span className="text-base sm:text-lg md:text-xl font-bold text-zinc-900 transition-colors hover:text-zinc-700 dark:text-zinc-100 dark:hover:text-zinc-300 truncate">
+            <span className="text-base sm:text-lg md:text-xl font-bold text-zinc-900 transition-colors duration-200 hover:text-zinc-700 dark:text-white dark:hover:text-zinc-200 truncate">
               Keploy
             </span>
           </Link>

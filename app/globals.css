@@ -47,6 +47,54 @@ body {
   background: #000000 !important;
 }
 
+/* Ensure header is dark in dark mode */
+.dark header {
+  background: #000000 !important;
+  border-color: #27272a !important; /* zinc-800 */
+}
+
+/* Ensure Keploy text color changes with theme */
+header a span:last-child {
+  color: #18181b !important; /* zinc-900 */
+  transition: color 0.2s ease !important;
+}
+
+.dark header a span:last-child {
+  color: #ffffff !important; /* white */
+}
+
+/* Ensure sidebar is dark in dark mode */
+.dark aside {
+  background: #000000 !important;
+  border-color: #27272a !important; /* zinc-800 */
+}
+
+/* Ensure footer is dark in dark mode */
+.dark footer {
+  background: #000000 !important;
+  border-color: #27272a !important; /* zinc-800 */
+}
+
+/* Ensure table of contents is dark in dark mode */
+.dark aside[class*="border-l"] {
+  background: #000000 !important;
+  border-color: #27272a !important; /* zinc-800 */
+}
+
+/* Ensure flex container with sidebar and main content is dark */
+.dark .flex.flex-1 {
+  background: #000000 !important;
+}
+
+/* Ensure all nav elements inside sidebar are dark */
+.dark aside nav {
+  background: transparent;
+}
+
+.dark aside nav * {
+  color: inherit;
+}
+
 /* Ensure main content area has proper text color */
 main {
   color: var(--foreground);
