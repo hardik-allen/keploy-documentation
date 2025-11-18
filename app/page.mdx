@@ -98,6 +98,9 @@ docker compose up
 
 This starts PostgreSQL in a Docker container. The application will connect to this database instance.
 
+![Docker Compose Output](/tutorial-images/step2-docker-compose-start.png)
+*Docker Compose starting PostgreSQL and building the application*
+
 <WhyBox title="Why Docker Compose?">
 It manages both your application and database dependencies, ensuring they're properly networked and can communicate with each other.
 </WhyBox>
@@ -122,10 +125,16 @@ docker build -t echo-app:1.0 .
 
 This creates a Docker image of your Echo application, ready to run in a container.
 
+![Docker Build Output](/tutorial-images/step3-docker-build-echo-app.png)
+*Terminal showing successful Docker build of echo-app:1.0*
+
 **What Keploy is doing here**: When you build the Docker image, you're creating a self-contained environment for your Echo application. Keploy will run this container and intercept all network traffic going in and out of it. The containerized approach ensures:
 - Consistent environment across different machines
 - Isolation from your host system's network
 - Easy cleanup after testing
+
+![PostgreSQL and Echo Application Logs](/tutorial-images/step3-postgres-echo-running.png)
+*Terminal showing PostgreSQL database ready and Echo server started on port 8082*
 
 <WhyBox title="Why this matters for Go developers">
 Docker provides a clean, reproducible environment. Your Echo app runs exactly the same way in the container as it would in production, and Keploy can observe all interactions without interfering with your local development setup. This means you can test with confidence that what works in the container will work in production.
@@ -166,6 +175,9 @@ eBPF allows Keploy to intercept network traffic at the kernel level, capturing a
 
 4. **Automatic Test Generation**: As Keploy captures these interactions, it automatically creates YAML test cases that can be replayed later.
 
+![Keploy Recording Test Cases](/tutorial-images/step4-keploy-capture-testcases.png)
+*Keploy terminal logs showing successful capture of test cases using eBPF*
+
 <WhyBox title="Why this is revolutionary for Go developers">
 - **No Test Code to Write**: You don't need to write `httptest.NewRecorder()` calls, mock database connections, or create test fixtures. Just use your API normally, and Keploy captures everything.
 
@@ -183,6 +195,9 @@ eBPF allows Keploy to intercept network traffic at the kernel level, capturing a
 <h3 id="echo-step-5">Step 5: Generate Testcases</h3>
 
 To generate testcases, we just need to make some API calls. You can use Hoppscotch, Postman, or cURL command. Keploy will capture those calls to generate the test-suites containing testcases and data mocks.
+
+![Postman API Request](/tutorial-images/step5-postman-create-url.png)
+*Postman showing POST request to create a shortened URL and the JSON response*
 
 **Create a shortened URL:**
 
@@ -318,6 +333,9 @@ keploy test -c "docker run -p 8082:8082 --name echoSqlApp --network keploy-netwo
    - Passed: 2/2
    - Failed: 0/2
 ```
+
+![Keploy Test Results](/tutorial-images/step6-keploy-test-summary.png)
+*Keploy test run summary showing all tests passed successfully*
 
 **What this means**: So no need to setup fake database/APIs like Postgres or write mocks for them. Keploy automatically mocks them, and the application thinks it's talking to Postgres 😄
 
