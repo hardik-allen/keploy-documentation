@@ -61,10 +61,10 @@ export default function Header() {
               </svg>
             </a>
 
-            {/* Theme toggle */}
+            {/* Theme toggle - hidden on mobile, visible on tablet and desktop */}
             <button
               onClick={toggleTheme}
-              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900 active:scale-95 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-zinc-100 flex-shrink-0 touch-manipulation"
+              className="hidden md:flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900 active:scale-95 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-zinc-100 flex-shrink-0 touch-manipulation"
               aria-label="Toggle theme"
             >
               {theme === 'light' ? (

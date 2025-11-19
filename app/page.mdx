@@ -10,10 +10,10 @@ Echo is known for its minimalist design and high performance, making it perfect 
 
 Testing these applications traditionally requires:
 
-- **1.Setting up test databases** — Provisioning PostgreSQL/MySQL instances, running migrations, managing schemas
-- **2.Writing complex SQL fixtures** — Creating test data that mirrors production scenarios
-- **3.Mocking database connections** — Using libraries like `go-sqlmock` or writing custom mock drivers
-- **4.Maintaining test data** — Keeping fixtures in sync as your schema evolves, ensuring data consistency across test runs
+1. **Setting up test databases** — Provisioning PostgreSQL/MySQL instances, running migrations, managing schemas
+2. **Writing complex SQL fixtures** — Creating test data that mirrors production scenarios
+3. **Mocking database connections** — Using libraries like `go-sqlmock` or writing custom mock drivers
+4. **Maintaining test data** — Keeping fixtures in sync as your schema evolves, ensuring data consistency across test runs
 
 **Keploy solves this** by recording your actual database interactions during normal API usage. No mocks, no fixtures—just real behavior captured and replayed as tests.
 
@@ -196,7 +196,7 @@ eBPF allows Keploy to intercept network traffic at the kernel level, capturing a
 
 To generate testcases, we just need to make some API calls. You can use Hoppscotch, Postman, or cURL command. Keploy will capture those calls to generate the test-suites containing testcases and data mocks.
 
-![Postman API Request](/tutorial-images/step5-postman-create-url.png)
+![Postman API Request](/tutorial-images/step6-keploy-test-summary.png)
 *Postman showing POST request to create a shortened URL and the JSON response*
 
 **Create a shortened URL:**
@@ -334,7 +334,7 @@ keploy test -c "docker run -p 8082:8082 --name echoSqlApp --network keploy-netwo
    - Failed: 0/2
 ```
 
-![Keploy Test Results](/tutorial-images/step6-keploy-test-summary.png)
+![Keploy Test Results](/tutorial-images/step5-postman-create-url.png)
 *Keploy test run summary showing all tests passed successfully*
 
 **What this means**: So no need to setup fake database/APIs like Postgres or write mocks for them. Keploy automatically mocks them, and the application thinks it's talking to Postgres 😄

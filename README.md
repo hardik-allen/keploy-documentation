@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Keploy Echo + SQL Documentation
+
+A comprehensive tutorial documentation site built with Next.js and MDX, showcasing how to integrate Keploy with Echo framework and SQL databases.
+
+🌐 **Live Demo**: [https://keploy-documentation.vercel.app/](https://keploy-documentation.vercel.app/)
+
+## Features
+
+- 📚 **Comprehensive Tutorial**: Step-by-step guide for integrating Keploy with Echo + SQL applications
+- 🎨 **Modern UI**: Clean, professional design with responsive layout
+- 🌓 **Dark/Light Mode**: Theme toggle for better reading experience (desktop/tablet)
+- 📱 **Mobile Responsive**: Fully optimized for all screen sizes
+- 🧭 **Navigation**: Sidebar navigation with collapsible sections and table of contents
+- 💡 **Interactive Components**: Custom Callout and WhyBox components for enhanced readability
+- 🖼️ **Visual Guides**: Screenshots and images integrated throughout the tutorial
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Content**: MDX for markdown with React components
+- **Styling**: Tailwind CSS
+- **TypeScript**: Full type safety
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ 
+- npm, yarn, pnpm, or bun
+
+### Installation
 
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the documentation.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+keploy-documentation/
+├── app/
+│   ├── page.mdx          # Main tutorial content
+│   ├── layout.tsx        # Root layout with header, sidebar, footer
+│   └── globals.css       # Global styles and theme
+├── components/
+│   ├── Header.tsx        # Navigation header
+│   ├── Sidebar.tsx       # Collapsible sidebar navigation
+│   ├── Footer.tsx        # Footer with links
+│   ├── TableOfContents.tsx  # Right-side TOC
+│   ├── Callout.tsx       # Info/warning/success callout component
+│   ├── WhyBox.tsx        # "Why" explanation component
+│   ├── ThemeProvider.tsx # Theme context provider
+│   └── SidebarContext.tsx # Sidebar state management
+├── public/
+│   └── tutorial-images/  # Tutorial screenshots
+└── mdx-components.tsx    # MDX component mappings
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Custom Components
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Callout
+```mdx
+<Callout type="info">
+  This is an informational callout.
+</Callout>
+```
 
-## Deploy on Vercel
+Types: `info`, `warning`, `success`, `error`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### WhyBox
+```mdx
+<WhyBox title="Why this matters">
+  Explanation of why this step is important.
+</WhyBox>
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+
+🌐 **Live Site**: [https://keploy-documentation.vercel.app/](https://keploy-documentation.vercel.app/)
+
+This project can be deployed on:
+- **Vercel** (recommended for Next.js) - [Deploy to Vercel](https://vercel.com/new)
+
+## License
+
+This project is part of the Keploy documentation.
