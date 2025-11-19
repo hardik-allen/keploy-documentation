@@ -44,21 +44,32 @@ export default function RootLayout({
               (function() {
                 try {
                   var theme = localStorage.getItem('theme');
-                  if (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    theme = 'dark';
+                  if (!theme) {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                      theme = 'dark';
+                    } else {
+                      theme = 'light';
+                    }
                   }
-                  if (!theme) theme = 'light';
                   
+                  var html = document.documentElement;
                   if (theme === 'dark') {
-                    document.documentElement.classList.add('dark');
-                    document.documentElement.style.backgroundColor = '#000000';
-                    document.body.style.backgroundColor = '#000000';
+                    html.classList.add('dark');
+                    html.style.backgroundColor = '#000000';
+                    if (document.body) {
+                      document.body.style.backgroundColor = '#000000';
+                    }
                   } else {
-                    document.documentElement.classList.remove('dark');
-                    document.documentElement.style.backgroundColor = '';
-                    document.body.style.backgroundColor = '';
+                    html.classList.remove('dark');
+                    html.style.backgroundColor = '';
+                    if (document.body) {
+                      document.body.style.backgroundColor = '';
+                    }
                   }
-                } catch (e) {}
+                } catch (e) {
+                  // Fallback to light theme on error
+                  document.documentElement.classList.remove('dark');
+                }
               })();
             `,
           }}
