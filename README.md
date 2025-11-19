@@ -91,6 +91,3 @@ Types: `info`, `warning`, `success`, `error`
 
 🌐 **Live Site**: [https://keploy-documentation.vercel.app/](https://keploy-documentation.vercel.app/)
 
-## License
-
-This project is part of the Keploy documentation.
