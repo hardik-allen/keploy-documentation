@@ -91,9 +91,6 @@ Types: `info`, `warning`, `success`, `error`
 
 🌐 **Live Site**: [https://keploy-documentation.vercel.app/](https://keploy-documentation.vercel.app/)
 
-This project can be deployed on:
-- **Vercel** (recommended for Next.js) - [Deploy to Vercel](https://vercel.com/new)
-
 ## License
 
 This project is part of the Keploy documentation.
